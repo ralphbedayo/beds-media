@@ -1,0 +1,26 @@
+version: '3.1'
+
+networks:
+    frontend:
+        driver: ${NETWORKS_DRIVER}
+    backend:
+        driver: ${NETWORKS_DRIVER}
+
+volumes:
+    qbittorrent:
+        driver: ${VOLUMES_DRIVER}
+
+
+services:
+    qbittorrent:
+        image: linuxserver/qbittorrent:${QB_VERSION}
+        environment:
+            - TZ=${QB_TZ}
+        volumes:
+            - ${QB_HOST_ROOT_PATH}/config:/config
+            - ${QB_HOST_ROOT_PATH}/torrents:/torrents
+            - ${MEDIA_HOST_ROOT_PATH}:/downloads
+        ports:
+            - ${QB_WEBUI_HOST_PORT}:8080
+            - ${QB_CLIENT_HOST_TCP_PORT}:6881/tcp
+            - ${QB_CLIENT_HOST_UDP_PORT}:6881/udp
