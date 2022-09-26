@@ -15,7 +15,7 @@ services:
     qbittorrent:
         image: linuxserver/qbittorrent:${QB_VERSION}
         environment:
-            - TZ=${QB_TZ}
+            - TZ=${TIMEZONE}
         volumes:
             - ${QB_HOST_ROOT_PATH}/config:/config
             - ${QB_HOST_ROOT_PATH}/torrents:/torrents
@@ -24,3 +24,15 @@ services:
             - ${QB_WEBUI_HOST_PORT}:8080
             - ${QB_CLIENT_HOST_TCP_PORT}:6881/tcp
             - ${QB_CLIENT_HOST_UDP_PORT}:6881/udp
+
+
+    nginx:
+        image: lscr.io/linuxserver/nginx:${NGINX_VERSION}
+        environment:
+            - TZ=${TIMEZONE}
+        volumes:
+            - ${NGINX_CONFIG_HOST_PATH}:/config
+            - ${APP_CODE_PATH_HOST}:/config/www
+        ports:
+            - ${NGINX_HTTP_HOST_PORT}:80
+            - ${NGINX_HTTPS_HOST_PORT}:443
