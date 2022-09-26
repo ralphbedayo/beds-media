@@ -1,0 +1,5 @@
+*
+!.gitignore
+!site-confs
+!nginx.conf.sample
+!ssl.conf.sample
