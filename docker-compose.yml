@@ -19,7 +19,8 @@ services:
         volumes:
             - ${QB_HOST_ROOT_PATH}/config:/config
             - ${QB_HOST_ROOT_PATH}/torrents:/torrents
-            - ${MEDIA_HOST_ROOT_PATH}:/downloads
+            - ${MEDIA_HOST_ROOT_PATH}:/media
+            - ${DOWNLOADS_HOST_ROOT_PATH}:/downloads
         ports:
             - ${QB_WEBUI_HOST_PORT}:8080
             - ${QB_CLIENT_HOST_TCP_PORT}:6881/tcp
