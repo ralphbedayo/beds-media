@@ -9,6 +9,10 @@ networks:
 volumes:
     qbittorrent:
         driver: ${VOLUMES_DRIVER}
+    nginx:
+        driver: ${VOLUMES_DRIVER}
+    plex:
+        driver: ${VOLUMES_DRIVER}
 
 
 services:
@@ -37,3 +41,14 @@ services:
         ports:
             - ${NGINX_HTTP_HOST_PORT}:80
             - ${NGINX_HTTPS_HOST_PORT}:443
+
+    plex:
+        image: lscr.io/linuxserver/plex:${PLEX_DOCKER_VERSION}
+        environment:
+            - TZ=${TIMEZONE}
+            - VERSION=${PLEX_SERVER_VERSION}
+        volumes:
+            - ${PLEX_CONFIG_HOST_PATH}:/config
+            - ${MEDIA_HOST_ROOT_PATH}:/movies
+        ports:
+            - ${PLEX_WEBUI_HOST_PORT}:32400/tcp
