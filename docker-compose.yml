@@ -13,6 +13,15 @@ volumes:
         driver: ${VOLUMES_DRIVER}
     plex:
         driver: ${VOLUMES_DRIVER}
+    jellyfin:
+        driver: ${VOLUMES_DRIVER}
+    bazarr:
+        driver: ${VOLUMES_DRIVER}
+    radarr:
+        driver: ${VOLUMES_DRIVER}
+    jackett:
+        driver: ${VOLUMES_DRIVER}
+
 
 
 services:
@@ -52,3 +61,50 @@ services:
             - ${MEDIA_HOST_ROOT_PATH}:/movies
         ports:
             - ${PLEX_WEBUI_HOST_PORT}:32400/tcp
+
+    jellyfin:
+        image: lscr.io/linuxserver/jellyfin:${JELLYFIN_DOCKER_VERSION}
+        environment:
+            - TZ=${TIMEZONE}
+            - JELLYFIN_PublishedServerUrl=${JELLYFIN_PUBLISHED_URL} #optional
+        volumes:
+            - ${JELLYFIN_CONFIG_HOST_PATH}:/config
+            - ${MEDIA_HOST_ROOT_PATH}:/data/movies
+        ports:
+            - ${JELLYFIN_HTTP_PORT}:8096
+            - ${JELLYFIN_HTTPS_PORT}:8920 #optional
+            - ${JELLYFIN_CLIENT_DISCOVERY_PORT}:7359/udp #optional
+            - ${JELLYFIN_SERVICE_DISCOVERY_PORT}:1900/udp #optional
+
+    bazarr:
+        image: lscr.io/linuxserver/bazarr:${BAZARR_DOCKER_VERSION}
+        environment:
+            - TZ=${TIMEZONE}
+        volumes:
+            - ${BAZARR_CONFIG_HOST_PATH}:/config
+            - ${MEDIA_HOST_ROOT_PATH}:/movies
+        ports:
+            - ${BAZARR_PORT}:6767
+
+    radarr:
+        image: lscr.io/linuxserver/radarr:${RADARR_DOCKER_VERSION}
+        environment:
+            - TZ=${TIMEZONE}
+        volumes:
+            - ${RADARR_CONFIG_HOST_PATH}:/config
+            - ${MEDIA_HOST_ROOT_PATH}:/movies
+            - ${RADARR_SUBTITLE_DOWNLOADS_PATH}:/downloads
+        ports:
+            - ${RADARR_PORT}:7878
+
+    jackett:
+        image: lscr.io/linuxserver/jackett:latest
+        environment:
+            - TZ=${TIMEZONE}
+            - AUTO_UPDATE=${JACKETT_AUTO_UPDATE} #optional
+            - RUN_OPTS=${JACKETT_RUN_OPTIONS} #optional
+        volumes:
+            - ${JACKETT_CONFIG_HOST_PATH}:/config
+            - ${JACKETT_BLACKHOLE_DOWNLOADS_PATH}:/downloads
+        ports:
+            - ${JACKETT_PORT}:9117
