@@ -19,6 +19,8 @@ volumes:
         driver: ${VOLUMES_DRIVER}
     radarr:
         driver: ${VOLUMES_DRIVER}
+    jackett:
+        driver: ${VOLUMES_DRIVER}
 
 
 
